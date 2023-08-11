@@ -1,24 +1,46 @@
-import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Button, Alert, StyleSheet } from 'react-native';
 import { Audio } from 'expo-av';
-const source = require('./public/family.mp3')
+const source = require('./public/family1.mp3')
 
 export default function App() {
-  const playSound = async() => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [sound, setSound] = useState<Audio.Sound>(); // Sử dụng null thay vì undefined
+  const soundObject = new Audio.Sound();
+
+  const playSound = async () => {
     try {
-      const soundObject = new Audio.Sound();
-      await soundObject.loadAsync(source);
-      await soundObject.playAsync();
+      if (!isPlaying) {
+        await soundObject.loadAsync(source);
+        setSound(soundObject);
+        await soundObject?.playAsync();
+        setIsPlaying(true);
+      }
     } catch (error) {
       console.error('Error playing sound:', error);
     }
-  }
+  };
+
+  const stopSound = async () => {
+    if (isPlaying) {
+      await sound?.stopAsync();
+      setIsPlaying(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isPlaying) {
+      Alert.alert(
+        'Thông báo',
+        'Âm thanh đang phát. Nhấn Cancel để dừng.',
+        [{ text: 'Cancel', onPress: async () => await stopSound() }]
+      );
+    }
+  }, [isPlaying]);
 
   return (
     <View style={styles.container}>
-      <View>
       <Button title="Phát âm thanh" onPress={playSound} />
-    </View>
     </View>
   );
 }
