@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Button, Alert, StyleSheet } from 'react-native';
 import Sound from './src/hooks/Sound';
+import Login from './pages/Login';
 
 export default function App() {
   const { playSound } = Sound()
@@ -10,9 +11,13 @@ export default function App() {
   }, [])
 
   return (
-    <View style={styles.container}>
-      <Button title="Phát âm thanh" onPress={playSound} />
-    </View>
+    <>
+      <Login />
+      {/* <View style={styles.container}>
+        <Button title="Phát âm thanh" onPress={playSound} />
+      </View> */}
+    </>
+
   );
 }
 
@@ -22,5 +27,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  }
 });
