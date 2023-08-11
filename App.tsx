@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Button, Alert, StyleSheet } from 'react-native';
 import { Audio } from 'expo-av';
+import Login from './pages/Login';
 const source = require('./public/family1.mp3')
 
 export default function App() {
@@ -33,15 +34,19 @@ export default function App() {
       Alert.alert(
         'Thông báo',
         'Đơn hàng mới!. Nhận ngay.',
-        [{ text: 'Cancel', onPress: async () => await stopSound() }, {text: 'OK', onPress: async () => await stopSound()},],
+        [{ text: 'Cancel', onPress: async () => await stopSound() }, { text: 'OK', onPress: async () => await stopSound() },],
       );
     }
   }, [isPlaying]);
 
   return (
-    <View style={styles.container}>
-      <Button title="Phát âm thanh" onPress={playSound} />
-    </View>
+    <>
+      <Login />
+      {/* <View style={styles.container}>
+        <Button title="Phát âm thanh" onPress={playSound} />
+      </View> */}
+    </>
+
   );
 }
 
@@ -51,5 +56,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  }
 });
