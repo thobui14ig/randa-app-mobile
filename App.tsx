@@ -32,8 +32,8 @@ export default function App() {
     if (isPlaying) {
       Alert.alert(
         'Thông báo',
-        'Âm thanh đang phát. Nhấn Cancel để dừng.',
-        [{ text: 'Cancel', onPress: async () => await stopSound() }]
+        'Đơn hàng mới!. Nhận ngay.',
+        [{ text: 'Cancel', onPress: async () => await stopSound() }, {text: 'OK', onPress: async () => await stopSound()},],
       );
     }
   }, [isPlaying]);
