@@ -2,7 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { useEffect } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import Sound from './src/hooks/Sound';
-import Socket from './src/socket/socket';
+import Socket from './src/socket/Socket';
 
 
 export default function App() {
