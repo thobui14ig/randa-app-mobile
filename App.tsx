@@ -1,10 +1,13 @@
 import { AntDesign } from '@expo/vector-icons';
-import React, { useEffect } from 'react';
-import { Button, StyleSheet, View } from 'react-native';
+import { useEffect } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import Sound from './src/hooks/Sound';
+import Socket from './src/socket/socket';
+
 
 export default function App() {
   const { playSound } = Sound()
+  const { socket } = Socket()
 
   useEffect(() => {
     playSound()
