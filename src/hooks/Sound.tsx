@@ -1,21 +1,26 @@
 import { Audio } from 'expo-av';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-import io from 'socket.io-client'
+import { socket } from '../socket/Socket.singleton';
 
 const source = require('../../public/family1.mp3')
 
 function Sound() {
     const [isPlaying, setIsPlaying] = useState(false);
-    const [sound, setSound] = useState<Audio.Sound>(); 
-    const soundObject = new Audio.Sound();
-  
+    const [sound, setSound] = useState<Audio.Sound | null>(null); 
+
     const playSound = async () => {
       try {
         if (!isPlaying) {
+          if (sound) {
+            await sound.stopAsync();
+            await sound.unloadAsync(); // giải phóng  tài nguyên âm thanh 
+          }
+
+          const soundObject = new Audio.Sound();
           await soundObject.loadAsync(source);
           setSound(soundObject);
-          await soundObject?.playAsync();
+          await soundObject.playAsync();
           setIsPlaying(true);
         }
       } catch (error) {
@@ -24,24 +29,30 @@ function Sound() {
     };
   
     const stopSound = async () => {
-      if (isPlaying) {
-        await sound?.stopAsync();
+      if (isPlaying && sound) {
+        await sound.stopAsync();
         setIsPlaying(false);
       }
     };
   
     useEffect(() => {
       if (isPlaying) {
-        
         Alert.alert(
           'Thông báo',
-          'Đơn hàng mới!. Nhận ngay.',
-          [{ text: 'Cancel', onPress: async () => await stopSound() }, {text: 'OK', onPress: async () => await stopSound()},],
+          'Đơn hàng mới! Nhận ngay.',
+          [{ text: 'Cancel', onPress: async () => await stopSound() }, { text: 'OK', onPress: async () => await stopSound() }],
         );
       }
     }, [isPlaying]);
 
-  return { playSound }
+    useEffect(() => {     
+      socket.on('nhandon', async () => {
+        await playSound();
+        console.log('Có đơn hàng!.')
+      });
+    }, [socket]);
+
+    return { playSound };
 }
 
-export default Sound
+export default Sound;
