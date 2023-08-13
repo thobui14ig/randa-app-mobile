@@ -1,21 +1,30 @@
 import { AntDesign } from '@expo/vector-icons';
-import { useEffect } from 'react';
-import { Button, StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import Sound from './src/hooks/Sound';
-import { socket } from './src/socket/Socket.singleton';
+import Login from './src/pages/auth/Login';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   Sound()
 
-  const handleNhanDon = () => {
-    socket?.emit('nhandonhang');
-  }
-
   return (
-    <View style={styles.container}>
-      <AntDesign name="down" size={24} color="black" />
-      <Button title="Phát âm thanh" onPress={handleNhanDon} />
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Login" component={Login} />
+      </Stack.Navigator>
+    </NavigationContainer>
+
+  );
+}
+
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>App kỹ thuật</Text>
     </View>
   );
 }
