@@ -5,7 +5,10 @@ export class SocketSingleton{
     socket: Socket;
 
     constructor() {
-        this.socket = io(ApiConstant.BASE_API_URL);
+        this.socket = io(ApiConstant.BASE_API_URL, {
+            query: { token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInBob25lIjoiMDk2MzQ2NjI2OSIsImlhdCI6MTY5MTkxMTY1NSwiZXhwIjoxNjkxOTk4MDU1fQ._Ww3Cosatfy1Jf13PcLzPJRNLSZMekOfgHMHGZSckqU` },
+            secure: true,
+          });
         this.socket.on('connect', () => {
           console.log('Connected to server');
         });
@@ -18,3 +21,4 @@ export class SocketSingleton{
 
 const socketObj = new SocketSingleton()
 export const socket = socketObj.getSocket()
+
