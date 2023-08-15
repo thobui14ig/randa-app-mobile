@@ -6,7 +6,7 @@ function Login({ navigation }: any) {
     const [passWord, setPassWord] = useState<string>('')
 
     const handleLogin = () => {
-        navigation.navigate('Home')
+        navigation.navigate('MyTabs')
     }
 
     return (

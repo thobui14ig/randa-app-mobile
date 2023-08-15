@@ -1,11 +1,12 @@
 import { Audio } from 'expo-av';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-import { socket } from '../socket/Socket.singleton';
+import { useSocket } from '../context/socket.context';
 
 const source = require('../../public/family1.mp3')
 
 function Sound() {
+  const { socket, setSocket } = useSocket()
     const [isPlaying, setIsPlaying] = useState(false);
     const [sound, setSound] = useState<Audio.Sound | null>(null); 
 
@@ -45,12 +46,14 @@ function Sound() {
       }
     }, [isPlaying]);
 
-    useEffect(() => {     
-      socket.on('nhandon', async () => {
+    useEffect(() => {    
+      
+      socket?.on('nhandon', async () => {
         await playSound();
         console.log('Có đơn hàng!.')
       });
     }, [socket]);
+
 
     return { playSound };
 }
