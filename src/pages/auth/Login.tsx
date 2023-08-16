@@ -1,12 +1,23 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { login } from '../../api/auth';
 
 function Login({ navigation }: any) {
     const [phone, setPhone] = useState<string>('')
     const [passWord, setPassWord] = useState<string>('')
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
+      try {
+        const { data } = await login({ phone: '0963466269', passWord: '111111' })
+        await AsyncStorage.setItem('token', data.access_token)
         navigation.navigate('MyTabs')
+      } catch (err) {
+        console.log(1111, err)
+      }
+      
+
+        // navigation.navigate('MyTabs')
     }
 
     return (

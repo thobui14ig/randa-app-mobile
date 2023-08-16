@@ -18,8 +18,6 @@ const SocketProvider = ({ children }: any) => {
     socket, setSocket
   };
 
-  console.log(5555555, socket)
-
   return <SocketContext.Provider value={values}>{children}</SocketContext.Provider>;
 };
 

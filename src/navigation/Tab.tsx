@@ -62,8 +62,8 @@ function MyTabs() {
 
 function HomeScreen() {
     const { setSocket } = useSocket()
-    const onPress = () => {
-        const socket = (new SocketSingleton()).getSocket()
+    const onPress = async () => {
+        const socket = await (new SocketSingleton()).getSocket()
         setSocket(socket)
     }
 

@@ -1,13 +1,16 @@
 import { io, Socket } from 'socket.io-client';
 import ApiConstant from '../api/apiConstant';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export class SocketSingleton{
-    getSocket() {
+    async getSocket() {
+      const token = await AsyncStorage.getItem('token')
+      console.log(123, token)
       const socket = io(ApiConstant.BASE_API_URL, {
-        query: { token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInBob25lIjoiMDk2MzQ2NjI2OSIsImlhdCI6MTY5MjAyOTgwMSwiZXhwIjoxNjkyMTE2MjAxfQ.wwz6ZGs_eFTJM8m0kkimC6bBjApRn-H2xfrUPXdScjM` },
+        query: { token },
         secure: true,
       });
-      socket.on('connect', () => {
+      socket?.on('connect', () => {
         console.log('Connected to server');
       });
 
