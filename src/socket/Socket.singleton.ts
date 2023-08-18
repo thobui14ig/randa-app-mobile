@@ -6,7 +6,7 @@ export class SocketSingleton{
     async getSocket() {
       const token = await AsyncStorage.getItem('token')
       console.log(123, token)
-      const socket = io(ApiConstant.BASE_API_URL, {
+      const socket = io(ApiConstant.URL, {
         query: { token },
         secure: true,
       });
