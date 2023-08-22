@@ -9,7 +9,7 @@ function Login({ navigation }: any) {
 
     const handleLogin = async () => {
       try {
-        const { data } = await login({ phone: '0963466269', passWord: '111111' })
+        const { data } = await login({ phone, passWord })
         await AsyncStorage.setItem('token', data.access_token)
         navigation.navigate('MyTabs')
       } catch (err) {

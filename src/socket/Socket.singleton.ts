@@ -5,19 +5,23 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export class SocketSingleton{
     async getSocket() {
       const token = await AsyncStorage.getItem('token')
-      console.log(123, token)
       const socket = io(ApiConstant.URL, {
         query: { token },
         secure: true,
       });
+
       socket?.on('connect', () => {
         console.log('Connected to server');
+      });
+
+      socket.on('error', (error) => {
+        console.error('Socket connection error:', error);
+      });
+      socket.on('disconnect', () => {
+        console.log('Disconnected from socket');
       });
 
       return socket
     }
 }
-
-// const socketObj = new SocketSingleton()
-// export const socket = socketObj.getSocket()
 

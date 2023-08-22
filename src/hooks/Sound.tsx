@@ -47,7 +47,6 @@ function Sound() {
     }, [isPlaying]);
 
     useEffect(() => {    
-      
       socket?.on('nhandon', async () => {
         await playSound();
         console.log('Có đơn hàng!.')
