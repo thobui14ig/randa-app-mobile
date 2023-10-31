@@ -1,20 +1,14 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
-import { Button, Image, Text, View } from 'react-native';
-import { Octicons } from '@expo/vector-icons'; 
-import { FontAwesome5 } from '@expo/vector-icons'; 
-import { Ionicons } from '@expo/vector-icons'; 
+import { FontAwesome5, Ionicons, Octicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
-import Sound from '../hooks/Sound';
-import { SocketSingleton } from '../socket/Socket.singleton';
-import { useSocket } from '../context/socket.context';
+import React from 'react';
+import { Text, View } from 'react-native';
+import Home from '../pages/home/Home';
 
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
-    Sound()
-
     return (
         <Tab.Navigator
         screenOptions={({route}) => ({
@@ -33,22 +27,15 @@ function MyTabs() {
         })}>
         <Tab.Screen
             name="Home"
-            component={HomeScreen}
+            component={Home}
             
             options={{
             tabBarLabel: 'Nhận đơn',
             headerShown: false,
             }}
         />
+
         <Tab.Screen
-            name="History"
-            component={OrderHistory}
-            options={{
-            tabBarLabel: 'Lịch sử',
-            headerShown: false,
-            }}
-        />
-            <Tab.Screen
             name="Settings"
             component={SettingsScreen}
             options={{
@@ -58,35 +45,6 @@ function MyTabs() {
         />
         </Tab.Navigator>
     );
-}
-
-function HomeScreen() {
-    const { setSocket } = useSocket()
-    const onPress = async () => {
-        const socket = await (new SocketSingleton()).getSocket()
-       
-        setSocket(socket)
-    }
-
-    return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Button
-            onPress={onPress}
-            title="Nhận đơn ngay"
-            color="#841584"
-        />
-        </View>
-    );
-}
-
-function OrderHistory() {
-  const navigation = useNavigation();
-
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Lịch sử đơn hàng</Text>
-    </View>
-  );
 }
 
 function SettingsScreen() {

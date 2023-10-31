@@ -1,27 +1,26 @@
-import { io, Socket } from 'socket.io-client';
+import { io, Socket as SocketType } from 'socket.io-client';
 import ApiConstant from '../api/apiConstant';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 export class SocketSingleton{
-    async getSocket() {
-      const token = await AsyncStorage.getItem('token')
-      const socket = io(ApiConstant.URL, {
-        query: { token },
-        secure: true,
-      });
-
-      socket?.on('connect', () => {
-        console.log('Connected to server');
-      });
-
-      socket.on('error', (error) => {
-        console.error('Socket connection error:', error);
-      });
-      socket.on('disconnect', () => {
-        console.log('Disconnected from socket');
-      });
-
-      return socket
+    socket: SocketType;
+    constructor() {
+        this.socket = io(ApiConstant.URL);
+        this.socket.on('connect', () => {
+          console.log('Connected to server admin page!.');
+        });
+        this.socket.on('error', (error) => {
+          console.error('Socket connection error:', error);
+        });
+        this.socket.on('disconnect', () => {
+          console.log('Disconnected from socket');
+        });
     }
+
+    getSocket() {
+        return this.socket;
+    }
+
+    
 }
 
+const socketObj = new SocketSingleton()
+export const Socket = socketObj.getSocket()

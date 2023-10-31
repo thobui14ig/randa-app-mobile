@@ -12,7 +12,7 @@ class Http {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-    });
+    })
   }
 }
 

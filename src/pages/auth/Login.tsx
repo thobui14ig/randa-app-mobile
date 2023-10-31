@@ -2,22 +2,45 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { login } from '../../api/auth';
+import Toast from 'react-native-toast-message';
+import { HttpStatusCode } from '../../enum/status-code';
+import isValidEmail from '../../libs/validate/email';
+import { LoginErrorMessage } from '../../enum/validation-error';
+import { StatusCodeMessage } from '../../enum/status-code-message';
+
 
 function Login({ navigation }: any) {
-    const [phone, setPhone] = useState<string>('')
-    const [passWord, setPassWord] = useState<string>('')
+    const [email, setEmail] = useState<string>('')
+    const [password, setPassWord] = useState<string>('')
 
     const handleLogin = async () => {
+      if (email.trim().length === 0 || password.trim().length === 0) {
+        return showError(LoginErrorMessage.NOT_NULL)
+      }
+
+      if (!isValidEmail(email)) {
+        return showError(LoginErrorMessage.NOT_EMAIL)
+      }
+
       try {
-        const { data } = await login({ phone, passWord })
+        const { data } = await login({ email, password })
         await AsyncStorage.setItem('token', data.access_token)
         navigation.navigate('MyTabs')
-      } catch (err) {
-        console.log(1111, err)
-      }
-      
 
-        // navigation.navigate('MyTabs')
+      } catch (error: any) {
+        if (error.response?.data?.statusCode === HttpStatusCode.Unauthorized) {
+          return showError(LoginErrorMessage.NOT_FOUND)
+        }
+
+        return showError(StatusCodeMessage.CODE_500)
+      }
+    }
+
+    const showError = (message: string) => {
+      Toast.show({
+        type: 'error',
+        text1: message
+      });
     }
 
     return (
@@ -28,7 +51,7 @@ function Login({ navigation }: any) {
                 style={styles.inputText}
                 placeholder="Email..." 
                 placeholderTextColor="#003f5c"
-                onChangeText={text => setPhone(text)}/>
+                onChangeText={text => setEmail(text)}/>
             </View>
             <View style={styles.inputView} >
             <TextInput  
@@ -47,8 +70,6 @@ function Login({ navigation }: any) {
             <TouchableOpacity>
                 <Text style={styles.loginText}>Signup</Text>
             </TouchableOpacity>
-
-    
         </View>
     )
 }
